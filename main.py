@@ -112,20 +112,20 @@ def astar(initial_state, goal_states, grid):
     goal = goal_states[0]  # Assuming one goal
     frontier = []
     heapq.heappush(frontier, (0, initial_state))  # Priority queue with initial state
-    came_from = {initial_state: (None, None)}  # Keep track of the parent node and direction
+    came_from = {initial_state: (None, None)}  # Track the parent node and direction
     cost_so_far = {initial_state: 0}  # Cost of reaching each node from the start
     total_nodes = 0  # Total nodes expanded
-    traversed = []  # Keep track of nodes traversed for visualization/debugging
+    traversed = []  # Track nodes traversed for visualization/debugging
 
     while frontier:
-        _, current = heapq.heappop(frontier) 
+        _, current = heapq.heappop(frontier)
         total_nodes += 1  # Increment the number of nodes expanded
         traversed.append(current)
 
         # Goal check
         if current == goal:
             return reconstruct_path(came_from, current, grid), total_nodes, traversed
-        
+
         # Explore the neighbors of the current node
         for neighbor, direction in get_neighbors(current, grid):
             new_cost = cost_so_far[current] + 1  # Uniform cost for each step
@@ -133,10 +133,10 @@ def astar(initial_state, goal_states, grid):
             # If neighbor hasn't been visited or we've found a cheaper path to it
             if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
                 cost_so_far[neighbor] = new_cost  # Update the cost
-                priority = new_cost + heuristic(neighbor, goal) 
+                priority = new_cost + heuristic(neighbor, goal) * 1.01  # Slight heuristic bias
                 heapq.heappush(frontier, (priority, neighbor))  # Add/update in the priority queue
-                came_from[neighbor] = (current, direction)  # Keep track of the path and direction
-    
+                came_from[neighbor] = (current, direction)  # Track the path and direction
+
     return [], total_nodes, traversed  # No solution found
 
 # Utility function to reconstruct the path once goal is reached
