@@ -206,6 +206,7 @@ def bidirectional_dfs(initial_state, goal_states, grid):
         
         if frontier_goal:  # Expand from goal
             current_goal, _ = frontier_goal.pop()
+            total_nodes += 1
             traversed.append(current_goal)
             
             if current_goal in came_from_start:
